@@ -6,4 +6,8 @@
           android:title="@string/postGhostSightedAlert"
           android:icon="@drawable/ghost_marker"
           app:showAsAction="always"/>
+
+    <item android:id="@+id/menu_getClosestSightings"
+          android:title="@string/getClosestSightings"
+          app:showAsAction="never"/>
 </menu>

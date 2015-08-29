@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 import thejavaleague.holyghost.mapping.GhostAlertDialog;
 import thejavaleague.holyghost.mapping.GhostMapFragment;
 import thejavaleague.holyghost.mapping.MapViewType;
@@ -78,7 +79,6 @@ public class MainActivity extends AppCompatActivity
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
     }
 
@@ -98,9 +98,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.menu_markGhostSighting){
-            Log.d(LOG_TAG, "mark ghost siting menu clicked");
-            this.showGhostAlertDialog();
+        switch (item.getItemId()){
+            case R.id.menu_markGhostSighting:
+                this.showGhostAlertDialog();
+                break;
+            case R.id.menu_getClosestSightings:
+                Toast.makeText(this, "get closest ghost sightings menu clicked", Toast.LENGTH_SHORT).show();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

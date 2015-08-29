@@ -10,8 +10,7 @@ public enum MapViewType {
     NORMAL (GoogleMap.MAP_TYPE_NORMAL),
     HYBRID (GoogleMap.MAP_TYPE_HYBRID),
     SATELLITE (GoogleMap.MAP_TYPE_SATELLITE),
-    TERRAIN (GoogleMap.MAP_TYPE_TERRAIN),
-    NONE (GoogleMap.MAP_TYPE_NONE);
+    TERRAIN (GoogleMap.MAP_TYPE_TERRAIN);
 
     private int mapType;
 

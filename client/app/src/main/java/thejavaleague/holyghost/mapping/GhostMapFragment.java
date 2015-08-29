@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -135,24 +136,23 @@ public class GhostMapFragment extends Fragment implements OnMapLoadedCallback, O
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Log.d(LOG_TAG, "Info window clicked");
+        Toast.makeText(appContext, "Info window clicked", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        Log.d(LOG_TAG, "Map LONG clicked");
         createMarker(latLng, "Test marker:\n" + latLng);
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Log.d(LOG_TAG, "Marker clicked");
+        Toast.makeText(appContext, "Marker clicked", Toast.LENGTH_SHORT).show();
         return false;
     }
 
     @Override
     public void onMyLocationChange(Location location) {
-        Log.d(LOG_TAG, "My location changed");
+        Toast.makeText(appContext, "My location changed", Toast.LENGTH_SHORT).show();
     }
 
     private void createMarker(LatLng latLng, String title) {

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RatingBar;
+import android.widget.Toast;
 import thejavaleague.holyghost.R;
 
 /**
@@ -29,7 +30,7 @@ public class GhostAlertDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Context appContext = getActivity();
+        final Context appContext = getActivity();
         AlertDialog.Builder builder = new AlertDialog.Builder(appContext);
         builder.setIcon(R.drawable.ghost_marker);
         builder.setTitle(R.string.GhostSightedAlert_title);
@@ -47,14 +48,14 @@ public class GhostAlertDialog extends DialogFragment {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.d(LOG_TAG, "pos btn clicked");
+                        Toast.makeText(appContext, "pos btn clicked", Toast.LENGTH_SHORT).show();
                     }
                 });
         builder.setNegativeButton(R.string.GhostSightedAlert_negBtn,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.d(LOG_TAG, "neg btn clicked");
+                        Toast.makeText(appContext, "neg btn clicked", Toast.LENGTH_SHORT).show();
                     }
                 });
 
