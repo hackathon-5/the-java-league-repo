@@ -41,6 +41,9 @@ public class Sightings {
 
         Sighting boonHallPlantation = new Sighting();
         boonHallPlantation.setLocation(32.8474085, -79.8263147);
+        boonHallPlantation.setTitle("Boon Hall Plantation");
+        boonHallPlantation.setDescription("test description");
+        boonHallPlantation.setRating(3);
 
         sightingList.add(stPhilips);
         sightingList.add(oldExchange);
@@ -51,5 +54,9 @@ public class Sightings {
         sightingList.add(battaeryCarrageInn);
         sightingList.add(whitePointGarden);
         sightingList.add(boonHallPlantation);
+    }
+
+    public List<Sighting> getSightingList() {
+        return sightingList;
     }
 }

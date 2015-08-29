@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity
                         ghostMap.getCurrentLocation().getLongitude()
                 );
                 sighting.setLocation(location);
-                //TODO: call the SightingService to save the sighting
+                ghostMap.createMarker(sighting);
             }
             @Override
             public void onNegativeButtonClicked(DialogInterface dialog) {}

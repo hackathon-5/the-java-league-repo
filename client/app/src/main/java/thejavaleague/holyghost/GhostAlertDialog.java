@@ -55,7 +55,6 @@ public class GhostAlertDialog extends DialogFragment {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(appContext, "pos btn clicked", Toast.LENGTH_SHORT).show();
                         Sighting sighting = createSightingFromData();
                         if(parentListener != null) {
                             parentListener.onPositiveButtonClicked(dialog, sighting);
@@ -66,7 +65,6 @@ public class GhostAlertDialog extends DialogFragment {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(appContext, "neg btn clicked", Toast.LENGTH_SHORT).show();
                         if(parentListener != null) {
                             parentListener.onNegativeButtonClicked(dialog);
                         }
@@ -86,7 +84,7 @@ public class GhostAlertDialog extends DialogFragment {
 
     private Sighting createSightingFromData() {
         Sighting sighting = new Sighting();
-        sighting.setName(sightingName.getText().toString());
+        sighting.setTitle(sightingName.getText().toString());
         sighting.setDescription(sightingDescription.getText().toString());
         sighting.setRating(rating.getNumStars());
         return sighting;

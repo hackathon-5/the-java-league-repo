@@ -3,12 +3,15 @@ package thejavaleague.holyghost.database.remote;
 import android.util.JsonReader;
 import android.util.JsonToken;
 import com.google.android.gms.maps.model.LatLng;
+import org.json.JSONException;
+import org.json.JSONObject;
 import thejavaleague.holyghost.database.Sighting;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,18 +28,24 @@ public class SightingParser {
         }
     }
 
-    public List<Sighting> readSightingsArray(JsonReader reader) throws IOException {
+    public List<Sighting> readSightingsArray(String json) throws IOException {
         List<Sighting> Sightings = new ArrayList();
 
-        reader.beginArray();
-        while (reader.hasNext()) {
-            Sightings.add(readSighting(reader));
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(json);
+            String title = jsonObject.getString("title");
+            String lat = jsonObject.getString("lat");
+            String lon = jsonObject.getString("lon");
+            String rating = jsonObject.getString("rating");
+            String description = jsonObject.getString("description");
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        reader.endArray();
         return Sightings;
     }
 
-    public Sighting readSighting(JsonReader reader) throws IOException {
+    public List<Sighting> readSightingsArray(JsonReader reader) throws IOException {
         String name = null;
         String description = null;
         LatLng location = null;
@@ -58,7 +67,7 @@ public class SightingParser {
             }
         }
         reader.endObject();
-        return new Sighting(name, description, location, rating);
+        return Collections.singletonList(new Sighting(name, description, location, rating));
     }
 
     public LatLng readDoublesArray(JsonReader reader) throws IOException {

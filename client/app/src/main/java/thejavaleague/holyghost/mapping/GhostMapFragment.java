@@ -29,6 +29,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import thejavaleague.holyghost.R;
+import thejavaleague.holyghost.database.GhostDatabase;
+import thejavaleague.holyghost.database.Sighting;
+import thejavaleague.holyghost.database.Sightings;
+
+import java.util.List;
 
 /**
  * Created by Chris on 8/28/15.
@@ -77,6 +82,19 @@ public class GhostMapFragment extends Fragment implements OnMapLoadedCallback, O
         map.setOnMapLongClickListener(this);
         map.setOnMarkerClickListener(this);
         map.setOnInfoWindowClickListener(this);
+    }
+
+    private void putSightingsMarkers(){
+        // Get the hard coded Sightings.
+        Sightings sightings = new Sightings();
+        List<Sighting> list = sightings.getSightingList();
+
+        // Add all Sightings to the map.
+        for(Sighting sighting : list){
+            createMarker(sighting);
+        }
+        // Move and zoom in to the last Sighting
+        animateCameraTo(list.get(list.size() - 1).getLocation(), 13);
     }
 
     public Location getCurrentLocation() {
@@ -158,26 +176,41 @@ public class GhostMapFragment extends Fragment implements OnMapLoadedCallback, O
         map.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
     }
 
+    /**
+     * Animates camera to the {@link LatLng} on the map
+     *
+     * @param location The coordinates on the map to move the camera to
+     * @param zoom     The zoom level for the map to go to during the move.
+     */
+    public void animateCameraTo(LatLng location, float zoom) {
+        CameraPosition cp = new CameraPosition.Builder()
+                .target(location)
+                .zoom(zoom)
+                .build();
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
+    }
+
     //// MAP LISTENERS
     @Override
     public void onMapLoaded() {
         Log.d(LOG_TAG, "Map loaded");
         this.initializeMap();
+        this.putSightingsMarkers();
     }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Toast.makeText(appContext, "Info window clicked", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(appContext, "Info window clicked", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        createMarker(latLng, "Test marker:\n" + latLng);
+//        Toast.makeText(appContext, "Map long clicked", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Toast.makeText(appContext, "Marker clicked", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(appContext, "Marker clicked", Toast.LENGTH_SHORT).show();
         return false;
     }
 
@@ -186,12 +219,13 @@ public class GhostMapFragment extends Fragment implements OnMapLoadedCallback, O
         Toast.makeText(appContext, "My location changed", Toast.LENGTH_SHORT).show();
     }
 
-    private void createMarker(LatLng latLng, String title) {
+    public void createMarker(Sighting sighting) {
         map.addMarker(new MarkerOptions()
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ghost_marker))
                 .anchor(1f, 1f) // Makes the ghost's tail as the marker point
-                .title(title)
-                .position(latLng)
+                .title(sighting.getTitle())
+                .snippet(sighting.getDescription() + "\n" + getString(R.string.rating) + ": " + sighting.getRating())
+                .position(sighting.getLocation())
                 .draggable(false));
     }
 

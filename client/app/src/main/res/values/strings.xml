@@ -21,5 +21,7 @@
     <string name="GhostSightedAlert_sightingRating">Rating</string>
 
     <string name="getClosestSightings">Get Closest Sightings</string>
+    <string name="rating">Rating</string>
+    <string name="errorReadingFromDatabase">Error reading from database.</string>
 
 </resources>
