@@ -1,4 +1,4 @@
-package thejavaleague.holycity;
+package thejavaleague.holyghost;
 
 import android.support.v7.app.AppCompatActivity;
 import android.app.Activity;
@@ -97,7 +97,7 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+        mDrawerListView.setAdapter(new ArrayAdapter<>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
@@ -112,6 +112,10 @@ public class NavigationDrawerFragment extends Fragment {
 
     public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
+    }
+
+    public void closeDrawer(){
+        mDrawerLayout.closeDrawer(mFragmentContainerView);
     }
 
     /**
