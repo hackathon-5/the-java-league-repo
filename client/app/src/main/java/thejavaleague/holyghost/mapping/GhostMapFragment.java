@@ -4,7 +4,9 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Point;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -74,8 +77,6 @@ public class GhostMapFragment extends Fragment implements OnMapLoadedCallback, O
         map.setOnMapLongClickListener(this);
         map.setOnMarkerClickListener(this);
         map.setOnInfoWindowClickListener(this);
-
-
     }
 
     public Location getCurrentLocation() {
@@ -125,6 +126,36 @@ public class GhostMapFragment extends Fragment implements OnMapLoadedCallback, O
         } else {
             map.moveCamera(CameraUpdateFactory.newLatLng(coordinates));
         }
+    }
+
+    /**
+     * moves camera to the {@link Location} on the map
+     *
+     * @param location The coordinates on the map to move the camera to
+     * @param animate     Boolean for animate to LatLng (true) or move to LatLng (false)
+     */
+    public void moveCameraTo(Location location, boolean animate) {
+        LatLng coordinates = new LatLng(location.getLatitude(), location.getLongitude());
+        if (animate) {
+            map.animateCamera(CameraUpdateFactory.newLatLng(coordinates));
+        } else {
+            map.moveCamera(CameraUpdateFactory.newLatLng(coordinates));
+        }
+    }
+
+    /**
+     * Animates camera to the {@link Location} on the map
+     *
+     * @param location The coordinates on the map to move the camera to
+     * @param zoom     The zoom level for the map to go to during the move.
+     */
+    public void animateCameraTo(Location location, float zoom) {
+        LatLng coordinates = new LatLng(location.getLatitude(), location.getLongitude());
+        CameraPosition cp = new CameraPosition.Builder()
+                .target(coordinates)
+                .zoom(15)
+                .build();
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
     }
 
     //// MAP LISTENERS

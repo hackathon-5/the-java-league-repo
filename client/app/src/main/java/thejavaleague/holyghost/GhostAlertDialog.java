@@ -1,4 +1,4 @@
-package thejavaleague.holyghost.mapping;
+package thejavaleague.holyghost;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,13 +7,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Toast;
 import thejavaleague.holyghost.R;
+import thejavaleague.holyghost.database.Sighting;
 
 /**
  * Created by Chris on 8/29/15.
@@ -24,9 +24,16 @@ public class GhostAlertDialog extends DialogFragment {
 
     private Location sightingLocation;
 
-    private EditText locationDescription;
+    private EditText sightingName;
     private EditText sightingDescription;
     private RatingBar rating;
+
+    private OnButtonClickListner parentListener;
+
+    interface OnButtonClickListner{
+        void onPositiveButtonClicked(DialogInterface dialog, Sighting sighting);
+        void onNegativeButtonClicked(DialogInterface dialog);
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -38,7 +45,7 @@ public class GhostAlertDialog extends DialogFragment {
         LayoutInflater inflater = LayoutInflater.from(appContext);
         final View inputView = inflater.inflate(R.layout.ghost_alert_dialog, null);
 
-        locationDescription = (EditText) inputView.findViewById(R.id.editText_locationDescription);
+        sightingName = (EditText) inputView.findViewById(R.id.editText_sightingName);
         sightingDescription = (EditText) inputView.findViewById(R.id.editText_sightingDescription);
         rating = (RatingBar) inputView.findViewById(R.id.ratingBar_sightingRating);
 
@@ -49,6 +56,10 @@ public class GhostAlertDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(appContext, "pos btn clicked", Toast.LENGTH_SHORT).show();
+                        Sighting sighting = createSightingFromData();
+                        if(parentListener != null) {
+                            parentListener.onPositiveButtonClicked(dialog, sighting);
+                        }
                     }
                 });
         builder.setNegativeButton(R.string.GhostSightedAlert_negBtn,
@@ -56,6 +67,9 @@ public class GhostAlertDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(appContext, "neg btn clicked", Toast.LENGTH_SHORT).show();
+                        if(parentListener != null) {
+                            parentListener.onNegativeButtonClicked(dialog);
+                        }
                     }
                 });
 
@@ -64,5 +78,17 @@ public class GhostAlertDialog extends DialogFragment {
 
     public void setSightingLocation(Location location){
         sightingLocation = location;
+    }
+
+    public void setOnButtonClickListener(OnButtonClickListner listener) {
+        this.parentListener = listener;
+    }
+
+    private Sighting createSightingFromData() {
+        Sighting sighting = new Sighting();
+        sighting.setName(sightingName.getText().toString());
+        sighting.setDescription(sightingDescription.getText().toString());
+        sighting.setRating(rating.getNumStars());
+        return sighting;
     }
 }

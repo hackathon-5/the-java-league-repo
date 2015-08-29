@@ -10,19 +10,17 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/GhostSightedAlert_locationDescription"
-            android:id="@+id/textView_locationDescription"/>
+            android:text="@string/GhostSightedAlert_sightingName"/>
     <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText_locationDescription"/>
+            android:id="@+id/editText_sightingName"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/GhostSightedAlert_sightingDescription"
-            android:id="@+id/textView_sightingDescription"/>
+            android:text="@string/GhostSightedAlert_sightingDescription"/>
     <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,8 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/GhostSightedAlert_sightingRating"
-            android:id="@+id/textView_sightingRating"/>
+            android:text="@string/GhostSightedAlert_sightingRating"/>
     <RatingBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

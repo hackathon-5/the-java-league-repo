@@ -16,8 +16,8 @@
     <string name="GhostSightedAlert_title">Ghost Sighted Alert!</string>
     <string name="GhostSightedAlert_posBtn">Send Alert</string>
     <string name="GhostSightedAlert_negBtn">Cancel</string>
-    <string name="GhostSightedAlert_locationDescription">Location Description</string>
-    <string name="GhostSightedAlert_sightingDescription">Sighting Description</string>
+    <string name="GhostSightedAlert_sightingName">Name</string>
+    <string name="GhostSightedAlert_sightingDescription">Description</string>
     <string name="GhostSightedAlert_sightingRating">Rating</string>
 
     <string name="getClosestSightings">Get Closest Sightings</string>

@@ -1,5 +1,6 @@
 package thejavaleague.holyghost;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -9,7 +10,8 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-import thejavaleague.holyghost.mapping.GhostAlertDialog;
+import com.google.android.gms.maps.model.LatLng;
+import thejavaleague.holyghost.database.Sighting;
 import thejavaleague.holyghost.mapping.GhostMapFragment;
 import thejavaleague.holyghost.mapping.MapViewType;
 
@@ -123,6 +125,19 @@ public class MainActivity extends AppCompatActivity
     private void showGhostAlertDialog() {
         GhostAlertDialog dialog = new GhostAlertDialog();
         dialog.setSightingLocation(ghostMap.getCurrentLocation());
+        dialog.setOnButtonClickListener(new GhostAlertDialog.OnButtonClickListner() {
+            @Override
+            public void onPositiveButtonClicked(DialogInterface dialog, Sighting sighting) {
+                LatLng location = new LatLng(
+                        ghostMap.getCurrentLocation().getLatitude(),
+                        ghostMap.getCurrentLocation().getLongitude()
+                );
+                sighting.setLocation(location);
+                //TODO: call the SightingService to save the sighting
+            }
+            @Override
+            public void onNegativeButtonClicked(DialogInterface dialog) {}
+        });
         dialog.show(getFragmentManager(), "Ghost_Alert_Dialog");
     }
 }
