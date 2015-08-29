@@ -1,10 +1,30 @@
-<ListView
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:background="@color/white"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
-        android:background="#cccc"
-        tools:context=".NavigationDrawerFragment"/>
+        android:layout_height="match_parent">
+
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/contentDescription_holyCityImage"
+                android:src="@drawable/holy_city"/>
+
+        <ListView
+                android:id="@+id/navDrawer_listView"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:choiceMode="singleChoice"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="0dp"
+                android:background="#cccc"
+                android:layout_weight="1"
+                tools:context=".NavigationDrawerFragment"/>
+
+</LinearLayout>

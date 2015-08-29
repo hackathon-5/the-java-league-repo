@@ -20,8 +20,10 @@ import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import thejavaleague.holyghost.R;
 
 /**
@@ -72,10 +74,15 @@ public class GhostMapFragment extends Fragment implements OnMapLoadedCallback, O
         map.setOnMarkerClickListener(this);
         map.setOnInfoWindowClickListener(this);
 
-        //TODO: Set the zoom level
+
+    }
+
+    public Location getCurrentLocation() {
+        return map.getMyLocation();
     }
 
 ///// MAP CAMERA
+
     /**
      * Set the zoom level of the map with the option to animate the motion.
      *
@@ -119,34 +126,7 @@ public class GhostMapFragment extends Fragment implements OnMapLoadedCallback, O
         }
     }
 
-    /**
-     * centers the marker at a position
-     *
-     * @param mark    the marker to center on the screen
-     * @param center  the position on the screen to move the marker. If null will center in the screen.
-     * @param animate set true to animation movement otherwise normal move
-     */
-    public void centerOnMarker(Marker mark, int[] center, boolean animate) {
-        if (mark == null) {
-            Log.e(LOG_TAG, "error: marker is null");
-            return;
-        }
-        LatLng coor = mark.getPosition();
-        if (center != null) {
-            Point markLoc = map.getProjection().toScreenLocation(coor);
-            Point newPos = new Point();
-            //x stays the same
-            newPos.x = markLoc.x;
-            //requested center y location is added to marker y location for offset
-            newPos.y = markLoc.y + center[1];
-            Log.i(LOG_TAG, "new marker position: " + newPos);
-            //set coor = newPos projection to center new position
-            coor = map.getProjection().fromScreenLocation(newPos);
-        }
-        moveCameraTo(coor, animate);
-    }
-
-//// MAP LISTENERS
+    //// MAP LISTENERS
     @Override
     public void onMapLoaded() {
         Log.d(LOG_TAG, "Map loaded");
@@ -161,6 +141,7 @@ public class GhostMapFragment extends Fragment implements OnMapLoadedCallback, O
     @Override
     public void onMapLongClick(LatLng latLng) {
         Log.d(LOG_TAG, "Map LONG clicked");
+        createMarker(latLng, "Test marker:\n" + latLng);
     }
 
     @Override
@@ -172,5 +153,18 @@ public class GhostMapFragment extends Fragment implements OnMapLoadedCallback, O
     @Override
     public void onMyLocationChange(Location location) {
         Log.d(LOG_TAG, "My location changed");
+    }
+
+    private void createMarker(LatLng latLng, String title) {
+        map.addMarker(new MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ghost_marker))
+                .anchor(1f, 1f) // Makes the ghost's tail as the marker point
+                .title(title)
+                .position(latLng)
+                .draggable(false));
+    }
+
+    public void setMapType(MapViewType type) {
+        map.setMapType(type.getType());
     }
 }

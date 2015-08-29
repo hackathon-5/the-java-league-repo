@@ -8,7 +8,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import thejavaleague.holyghost.mapping.GhostAlertDialog;
 import thejavaleague.holyghost.mapping.GhostMapFragment;
+import thejavaleague.holyghost.mapping.MapViewType;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks{
@@ -25,6 +27,8 @@ public class MainActivity extends AppCompatActivity
      */
     private CharSequence mTitle;
 
+    GhostMapFragment ghostMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +42,12 @@ public class MainActivity extends AppCompatActivity
         navigationDrawerFragment.setUp(
                 R.id.navigation_drawer_fragment,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        // Add map to Activity
+        ghostMap = new GhostMapFragment();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container_main, ghostMap)
+                .commit();
     }
 
 
@@ -46,9 +56,24 @@ public class MainActivity extends AppCompatActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         Log.i(LOG_TAG, "navigation drawer item selected");
-        getFragmentManager().beginTransaction()
-                .replace(R.id.container_main, new GhostMapFragment())
-                .commit();
+        if(ghostMap == null){
+            // This gets called before the map is ready. Default to 0;
+            return;
+        }
+        switch (position){
+            case 0:
+                ghostMap.setMapType(MapViewType.NORMAL);
+                break;
+            case 1:
+                ghostMap.setMapType(MapViewType.SATELLITE);
+                break;
+            case 2:
+                ghostMap.setMapType(MapViewType.TERRAIN);
+                break;
+            case 3:
+                ghostMap.setMapType(MapViewType.HYBRID);
+                break;
+        }
     }
 
     public void restoreActionBar() {
@@ -73,16 +98,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if(item.getItemId() == R.id.menu_markGhostSighting){
+            Log.d(LOG_TAG, "mark ghost siting menu clicked");
+            this.showGhostAlertDialog();
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -95,5 +114,11 @@ public class MainActivity extends AppCompatActivity
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void showGhostAlertDialog() {
+        GhostAlertDialog dialog = new GhostAlertDialog();
+        dialog.setSightingLocation(ghostMap.getCurrentLocation());
+        dialog.show(getFragmentManager(), "Ghost_Alert_Dialog");
     }
 }
