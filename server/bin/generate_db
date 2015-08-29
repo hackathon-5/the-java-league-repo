@@ -1,0 +1,85 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+use DBI;
+use DBIx::Class::Schema::Loader 'make_schema_at';
+use FindBin;
+use Getopt::Long;
+
+my $generate_ddl = <<'EOF';
+DROP TABLE IF EXISTS Sighting;
+DROP TABLE IF EXISTS Account;
+DROP TABLE IF EXISTS Location;
+
+CREATE TABLE account (
+   id SERIAL NOT NULL PRIMARY KEY,
+   username varchar(63) NOT NULL UNIQUE,
+   password char(60) NOT NULL,
+   realname varchar(128)
+);
+
+CREATE TABLE location (
+   id SERIAL NOT NULL PRIMARY KEY,
+   lat double precision NOT NULL,
+   lon double precision NOT NULL,
+   title varchar(128) NOT NULL,
+   description text
+);
+
+CREATE TABLE sighting (
+   id SERIAL NOT NULL PRIMARY KEY,
+   account_id integer NOT NULL REFERENCES account(id) ON DELETE CASCADE,
+   lat double precision NOT NULL,
+   lon double precision NOT NULL,
+   seen_date timestamp NOT NULL DEFAULT CURRENT_DATE,
+   title varchar(128) NOT NULL,
+   rating smallint CHECK (rating >= 0 AND rating <=5),
+   description text
+);
+
+INSERT INTO account (username, password, realname) VALUES (
+   'test',
+   crypt('test', gen_salt('bf')),
+   'Test User'
+);
+EOF
+
+# parse command line arguments
+my $host     = 'localhost';
+my $port     = 5432;
+my $dbname   = 'holyghost';
+my $username = 'holyghost';
+my $password = 'holyghost';
+GetOptions('host=s'     => \$host,
+           'port=s'     => \$port,
+           'dbname=s'   => \$dbname,
+           'username=s' => \$username,
+           'password=s' => \$password
+) or die "usage: ./generate_db [--host <host> --port <port> --dbname <dbname> --user <user> --password <password>]\n";
+
+
+# connect to the db
+my $dsn = "dbi:Pg:dbname=$dbname;host=$host;port=$port";
+my $dbh = DBI->connect(
+   $dsn, $username, $password, { RaiseError => 1, sqlite_unicode => 1 }
+) or die "$DBI::errstr\n";
+
+
+# create tables
+if ($dbh->do($generate_ddl) < 0) {
+   die "failed to set up database: $DBI::errstr";
+}
+print "postgresql db generated \n";
+
+# generate perl DBIx classes (Schema::Loader so pro)
+my $schema = make_schema_at(
+   'HolyGhost::DB::Schema',
+   {
+      dump_directory => "$FindBin::Bin/../lib",
+      generate_pod   => 0
+   },
+   [ $dsn, $username, $password ]
+);
+print "DBIx classes created at $schema\n";
