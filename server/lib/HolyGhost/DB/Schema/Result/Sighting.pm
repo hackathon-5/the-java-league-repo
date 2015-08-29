@@ -25,9 +25,10 @@ __PACKAGE__->add_columns(
   { data_type => "double precision", is_nullable => 0 },
   "seen_date",
   {
-    data_type     => "timestamp",
-    default_value => \"('now'::text)::date",
+    data_type     => "timestamp with time zone",
+    default_value => \"current_timestamp",
     is_nullable   => 0,
+    original      => { default_value => \"now()" },
   },
   "title",
   { data_type => "varchar", is_nullable => 0, size => 128 },
@@ -45,9 +46,10 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-08-29 08:56:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FtAobqyTyJ/RL+qRTUTZJA
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-08-29 11:34:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cgIkrH7fGVxw/IOL7QPKtA
 
-__PACKAGE__->load_components(qw/PK::Auto/);
+__PACKAGE__->load_components(qw/PK::Auto TimeStamp/);
+__PACKAGE__->add_columns('+seen_date' => {set_on_create => 1});
 
 1;

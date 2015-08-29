@@ -33,7 +33,7 @@ CREATE TABLE sighting (
    account_id integer NOT NULL REFERENCES account(id) ON DELETE CASCADE,
    lat double precision NOT NULL,
    lon double precision NOT NULL,
-   seen_date timestamp NOT NULL DEFAULT CURRENT_DATE,
+   seen_date timestamp with time zone NOT NULL DEFAULT current_timestamp,
    title varchar(128) NOT NULL,
    rating smallint CHECK (rating >= 0 AND rating <=5),
    description text
